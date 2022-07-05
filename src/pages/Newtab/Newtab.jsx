@@ -21,9 +21,13 @@ const Newtab = () => {
   const [showModal, setShowModal] = React.useState(false);
 
   React.useEffect(() => {
-    chrome.storage.sync.get(['token'], (result) => {
-      console.log('token value ' + result.token);
-      setToken(result.token);
+    chrome.storage.sync.get(['settings'], (result) => {
+      if (result.settings) {
+        setToken(result.settings.token);
+        console.log('token', result.settings.token)
+      } else {
+        setDisplayError("Missing or invalid token, please set in extension's popup settings ↗️");
+      }
     });
   }, []);
 
@@ -153,13 +157,17 @@ const Newtab = () => {
   const author = 'John Doe';
   const source = 'Some book mlmao';
 
-  React.useEffect(() => {
-    
-  }, [highlight])
+  const displayText = React.useMemo(() => {
+    if (highlight.text && highlight.text.length > 600) {
+      return `${highlight.text.substring(0, 600)}...`;
+    } else {
+      return highlight.text;
+    }
+  }, [highlight.text]);
 
   return (
-    <>
-      {displayError && <div className="w-screen h-screen justify-center align-center m-auto text-center text-3xl text-red-500">{displayError}</div>}
+    <div className="flex w-screen h-screen justify-center items-center">
+      {displayError && !highlight.text && <div className="text-center text-3xl text-red-500">{displayError}</div>}
       <Transition
         show={highlightLoaded}
         enter="transition ease-in-out duration-500 transform"
@@ -174,7 +182,7 @@ const Newtab = () => {
             <div className="flex flex-col justify-center align-center m-auto">
               {highlight.text && (
                 <blockquote className="flex flex-col max-w-prose text-3xl gap-8 border-gray-300 dark:border-gray-600 border-l-4 px-8 py-4">
-                  <p className="text-black dark:text-white font-Fancy leading-relaxed">{highlight.text}</p>
+                  <p className="text-black dark:text-white font-Fancy leading-relaxed">{displayText}</p>
                 </blockquote>
               )}
               <Transition.Child
@@ -214,7 +222,7 @@ const Newtab = () => {
           </div>
         )}
       </Transition>
-    </>
+    </div>
   );
 };
 

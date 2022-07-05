@@ -1,7 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Readwise New Tab Quote Page",
-  "description": "Replace the new tab page with a Readwise highlight",
+  "name": "Readwise New Tab Highlights Page (Unofficial)",
+  "description": "Unofficial new tab page to display a Readwise highlight and its related information. Delete, modify and view more highlights.",
+  "version": "1.0.0",
   "options_page": "options.html",
   "background": { "service_worker": "background.bundle.js" },
   "action": {
@@ -12,7 +13,7 @@
     "newtab": "newtab.html"
   },
   "icons": {
-    "128": "icon-192.png"
+    "128": "icon-128.png"
   },
   "content_scripts": [
     {
@@ -25,7 +26,7 @@
   "permissions": ["storage"],
   "web_accessible_resources": [
     {
-      "resources": ["content.styles.css", "icon-192.png", "icon-34.png"],
+      "resources": ["content.styles.css", "icon-128.png", "icon-34.png"],
       "matches": []
     }
   ]

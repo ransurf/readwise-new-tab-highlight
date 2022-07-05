@@ -1,5 +1,6 @@
 import { Switch } from '@headlessui/react';
 import React from 'react';
+import KoFi from './KoFi';
 import './Popup.css';
 
 const Popup = () => {
@@ -46,9 +47,10 @@ const Popup = () => {
   };
 
   return (
+    <>
     <div className="App">
       <header className="App-container">
-        <h1 className="text-lg">Settings</h1>
+        <h1 className="text-lg font-bold">Settings</h1>
         <label>
           Access Token (Get{' '}
           <a href="https://readwise.io/access_token" className="text-blue-400">
@@ -81,8 +83,10 @@ const Popup = () => {
             </Switch>
           </div>
         </Switch.Group>
+        <KoFi className="mt-4" color="#29abe0" id="johnmavrick" label="Support Me on Ko-fi" />
       </header>
     </div>
+    </>
   );
 };
 
