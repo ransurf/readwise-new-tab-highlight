@@ -6,7 +6,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import clsx from 'clsx';
 import { formSchema, validationSchema } from './schema';
 
-const DetailsModal = ({ showModal, setShowModal, highlight, bookInfo, token }) => {
+const DetailsModal = ({ showModal, setShowModal, highlight, setHighlight, bookInfo, token }) => {
   const { title, author, highlightsURL } = bookInfo;
   const { text, note, id } = highlight;
   const [showError, setShowError] = React.useState(false);
@@ -16,8 +16,8 @@ const DetailsModal = ({ showModal, setShowModal, highlight, bookInfo, token }) =
       .patch(
         `https://readwise.io/api/v2/highlights/${id}/`,
         {
-          text: highlight.text,
-          note: highlight.note,
+          text: highlight.highlight,
+          note: highlight.notes,
         },
         {
           headers: {
@@ -27,7 +27,6 @@ const DetailsModal = ({ showModal, setShowModal, highlight, bookInfo, token }) =
         }
       )
       .then((response) => {
-        console.log(response);
         setShowModal(false);
       })
       .catch((error) => {
@@ -37,10 +36,15 @@ const DetailsModal = ({ showModal, setShowModal, highlight, bookInfo, token }) =
   };
 
   const handleSubmit = (values) => {
-    console.log(values);
     updateHighlight(values);
+    setHighlight({
+      ...highlight,
+      text: values.highlight,
+      note: values.notes,
+    })
     setShowError(false);
   };
+
   return (
     <Transition
       show={showModal}

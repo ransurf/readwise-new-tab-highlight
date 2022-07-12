@@ -24,7 +24,6 @@ const Newtab = () => {
     chrome.storage.sync.get(['settings'], (result) => {
       if (result.settings) {
         setToken(result.settings.token);
-        console.log('token', result.settings.token)
       } else {
         setDisplayError("Missing or invalid token, please set in extension's popup settings ↗️");
       }
@@ -47,13 +46,10 @@ const Newtab = () => {
         },
       })
       .then((response) => {
-        console.log(response);
-        console.log('highlightsCount', response.data.count);
         setHighlightsCount(response.data.count);
         getHighlightDetails(response.data.count);
       })
       .catch((error) => {
-        console.log(error);
         setDisplayError(error.message);
         setHighlight({
           text: 'Slow down. You are being rate limited.',
@@ -66,7 +62,6 @@ const Newtab = () => {
     let random;
     do {
       random = Math.floor(Math.random() * currentCount + 1);
-      console.log('random', random, currentPage);
     } while (currentPage && random === currentPage);
     setCurrentPage(random);
     axios
@@ -81,13 +76,12 @@ const Newtab = () => {
         },
       })
       .then((response) => {
-        console.log(response);
         setHighlight(response.data.results[0]);
         setHighlightLoaded(true);
       })
       .catch((error) => {
-        console.log(error);
         setDisplayError(error.message);
+        console.log(error);
       });
   };
 
@@ -100,7 +94,6 @@ const Newtab = () => {
         },
       })
       .then((response) => {
-        console.log('getBookDetails', response);
         setBookInfo({
           title: response.data.title,
           author: response.data.author,
@@ -121,7 +114,6 @@ const Newtab = () => {
         },
       })
       .then((response) => {
-        console.log(response);
         getHighlightCount();
       })
       .catch((error) => {
@@ -139,13 +131,14 @@ const Newtab = () => {
     getHighlightDetails();
   };
 
-  const openModal = () => {
-    setShowModal(true);
-  };
-
   React.useEffect(() => {
     console.log('displayError', displayError);
   }, [displayError]);
+
+  const setHighlightWrapper = (highlight) => {
+    setHighlight(highlight);
+  }
+
 
   const quote = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
   eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
@@ -215,6 +208,7 @@ const Newtab = () => {
             <DetailsModal
               showModal={showModal}
               setShowModal={setShowModal}
+              setHighlight={setHighlightWrapper}
               highlight={highlight}
               bookInfo={bookInfo}
               token={token}

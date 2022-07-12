@@ -94,7 +94,6 @@ export const Form: React.FC<Props> = ({
             onChange: field.onChange,
             onBlur: field.onBlur,
           });
-          console.log(rest);
           const handleRef = React.useCallback(
             (e: any) => {
               ref(e);
